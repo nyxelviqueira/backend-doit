@@ -1,15 +1,12 @@
 const getConnection = require('../getConnection');
 
-
 const insertReplyQuery = async (idUser, idService, finalFile, observations) => {
-
     let connection;
 
     try {
-
         connection = await getConnection();
 
-        await connection.query(
+        const [result] = await connection.query(
             `
             INSERT INTO replies (idUser, idService, finalFile, observations, createdAt)
             VALUES (?, ?, ?, ?, ?)
@@ -17,10 +14,10 @@ const insertReplyQuery = async (idUser, idService, finalFile, observations) => {
             [idUser, idService, finalFile, observations, new Date()]
         );
 
-
+        return result.insertId;
     } finally {
         if (connection) connection.release();
     }
-}
+};
 
 module.exports = insertReplyQuery;
